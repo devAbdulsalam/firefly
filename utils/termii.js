@@ -22,10 +22,10 @@ export const sendSMS = async (message, phone) => {
 		// console.log('senderIdResponse', senderIdResponse);
 
 		const response = await axios.post(`${apiUrl}/sms/send`, {
-			from: 'talert',
-			sms: 'Hi there, testing Termii',
+			from: senderId,
+			sms: message,
 			// sms: message,
-			serder_id: senderId,
+			// serder_id: senderId,
 			to: phone,
 			type: 'plain',
 			api_key: apiKey,

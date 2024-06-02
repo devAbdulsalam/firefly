@@ -7,9 +7,7 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL UNIQUE,
   password TEXT NOT NULL,  
   phone VARCHAR(255) NOT NULL,
-  role ENUM('STUDENT', 'STAFF', 'ADMIN') NOT NULL,
-  registration_number VARCHAR(50),
-  staff_id VARCHAR(50)
+  role VARCHAR(225) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -20,6 +18,15 @@ CREATE TABLE avatar (
   public_id VARCHAR(255) NOT NULL,
   url VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE report (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    address TEXT NOT NULL,
+    description TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending'
+    report_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
 CREATE TABLE bus (
@@ -53,14 +60,7 @@ CREATE TABLE ticket (
 );
 
 
-CREATE TABLE report (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    address TEXT NOT NULL,
-    description TEXT NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Pending'
-    report_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-);
+
 
 
 -- ALTER TABLE products ADD COLUMN category_id INTEGER REFERENCES category(id)
