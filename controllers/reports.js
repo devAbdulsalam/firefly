@@ -53,15 +53,13 @@ export const getDashboard = async (req, res) => {
 };
 export const reportEmergency = async (req, res) => {
 	try {
-		const { address, geolocation } = req.body;
+		const { address, geolocation, description } = req.body;
 		const { id } = req.user;
 		// const image = req.file;
 
 		if (!address || !geolocation) {
 			return res.status(400).send('Missing required fields');
 		}
-		// console.log('address', address);
-		// console.log('and geo', geolocation);
 		const user = await pool.query(
 			'SELECT  id, phone, username FROM users WHERE id = $1',
 			[id]
@@ -69,7 +67,7 @@ export const reportEmergency = async (req, res) => {
 
 		const newReport = await pool.query(
 			'INSERT INTO report (user_id, address, description ) VALUES ($1, $2, $3) RETURNING *',
-			[id, address, geolocation]
+			[id, address, description || geolocation]
 		);
 		// get admin
 		const admin = await pool.query(

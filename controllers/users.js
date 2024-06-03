@@ -41,8 +41,9 @@ export const login = async (req, res) => {
 			return res.status(400).json({ message: 'Username or password is wrong' });
 		}
 		const validPass = await bcrypt.compare(password, user.rows[0].password);
-		if (!validPass)
+		if (!validPass) {
 			return res.status(400).json({ message: 'Invalid password' });
+		}
 
 		const userId = user.rows[0].id;
 		const token = await createToken({
@@ -359,7 +360,7 @@ export const updateUser = async (req, res) => {
 		const { id } = req.user || req.params;
 		const { username, email, phone } = req.body;
 		const user = await pool.query(
-			'UPDATE users SET username = $1, email = $2,  phone = $3 WHERE id = $4 RETURNING *',
+			'UPDATE users SET username = $1, email = $2,  phone = $3 WHERE id = $4 RETURNING id, username, email, phone, role',
 			[username, email, phone, id]
 		);
 		const avatar = await pool.query(
