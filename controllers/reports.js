@@ -57,7 +57,7 @@ export const reportEmergency = async (req, res) => {
 		const { id } = req.user;
 		// const image = req.file;
 
-		if (!address || !geolocation) {
+		if (!address) {
 			return res.status(400).send('Missing required fields');
 		}
 		const user = await pool.query(

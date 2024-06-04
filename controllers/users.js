@@ -344,7 +344,7 @@ export const changePassword = async (req, res) => {
 			'UPDATE users SET password = $1 WHERE id = $2',
 			[hashedPassword, id]
 		);
-		// console.log('user', user);
+		console.log('user', user);
 		if (user.rows.length === 0) {
 			return res.status(400).json({ message: 'Username or password is wrong' });
 		}
