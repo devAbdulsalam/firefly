@@ -339,16 +339,17 @@ export const changePassword = async (req, res) => {
 	const { id } = req.user;
 	const { newPassword } = req.body;
 	try {
+		const user = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+		console.log('user', user);
+		if (user.rows.length === 0) {
+			return res.status(400).json({ message: 'Invalid user id' });
+		}
 		const hashedPassword = await bcrypt.hash(newPassword, 10);
-		const user = await pool.query(
+		const updatedUser = await pool.query(
 			'UPDATE users SET password = $1 WHERE id = $2',
 			[hashedPassword, id]
 		);
-		console.log('user', user);
-		if (user.rows.length === 0) {
-			return res.status(400).json({ message: 'Username or password is wrong' });
-		}
-		res.status(200).json(user.rows[0]);
+		res.status(200).json(updatedUser.rows[0]);
 	} catch (err) {
 		console.log(err);
 		res.status(500).json(err.message);
