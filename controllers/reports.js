@@ -53,7 +53,7 @@ export const getDashboard = async (req, res) => {
 };
 export const reportEmergency = async (req, res) => {
 	try {
-		const { address, geolocation, description } = req.body;
+		const { address, description, latitude, longitude } = req.body;
 		const { id } = req.user;
 		// const image = req.file;
 
@@ -67,7 +67,7 @@ export const reportEmergency = async (req, res) => {
 
 		const newReport = await pool.query(
 			'INSERT INTO report (user_id, address, description ) VALUES ($1, $2, $3) RETURNING *',
-			[id, address, description || geolocation]
+			[id, address, description]
 		);
 		// get admin
 		const admin = await pool.query(
@@ -87,8 +87,9 @@ export const reportEmergency = async (req, res) => {
 				.json({ message: 'No admin found. Please contact admin' });
 		}
 		// Send SMS
+		const geolocation = `https://gps-coordinates.org/my-location.php?lat=${latitude}&lng=${longitude}`;
 		const message = `Fire Incident Reported by ${userName}\nPhone: ${userPhone}\nAddress: ${address}\nGeolocation: ${geolocation}`;
-		const smsData = await sendSMS(message, adminPhone);
+		await sendSMS(message, adminPhone);
 		// console.log('report', smsData);
 
 		// Respond with success
