@@ -46,10 +46,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
 	const { email, password } = req.body;
 	try {
-		// const user = await pool.query('SELECT * FROM users WHERE email = $1', [
-		// 	email,
-		// ]);
-
 		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(400).json({ message: 'Username or password is wrong' });
@@ -67,14 +63,6 @@ export const login = async (req, res) => {
 		const refreshToken = await createRefreshToken({
 			id: userId,
 		});
-		// const userInfo = await pool.query(
-		// 	'SELECT id, username, email, phone, role FROM users WHERE id = $1',
-		// 	[userId]
-		// );
-		// const avatar = await pool.query(
-		// 	'SELECT url FROM avatar WHERE user_id = $1',
-		// 	[userId]
-		// );
 		res.header('Authorization', token).json({
 			token,
 			refreshToken,
