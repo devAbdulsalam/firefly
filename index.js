@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -22,8 +23,8 @@ app.use('/welcome', (req, res) => {
 	res.status(200).json({ message: 'Welcome to bus booking api' });
 });
 app.use('/users', userRoutes);
-// app.use('/booking', bookingRoutes);
 app.use('/reports', reportRoutes);
+// // app.use('/booking', bookingRoutes);
 
 // app.use('/setup', setupRoutes);
 
@@ -32,6 +33,11 @@ app.use('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
-});
+
+/* MONGOOSE SETUP */
+mongoose
+	.connect(process.env.MONGO_URI)
+	.then(() => {
+		app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+	})
+	.catch((error) => console.log(`${error} did not connect`));
