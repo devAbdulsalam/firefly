@@ -72,7 +72,7 @@ export const reportEmergency = async (req, res) => {
 		const userName = user?.username;
 		const adminPhone = admin?.phone;
 		// console.log('userName', userName);
-		// console.log('adminPhone', adminPhone);
+		console.log('adminPhone', adminPhone);
 		if (!adminPhone) {
 			return res
 				.status(400)
