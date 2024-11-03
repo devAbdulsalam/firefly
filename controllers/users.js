@@ -8,15 +8,38 @@ import fs from 'fs';
 import User from '../models/User.js';
 
 dotenv.config();
+// Utility function to validate and format phone number
+const formatPhoneNumber = (phone) => {
+	// Remove non-numeric characters and standardize to 13-digit format
+	let formattedPhone = phone.replace(/\D/g, '');
+	console.log('valid format', formattedPhone);
+	// Directly return if already in +234 format with 13 digits
+	if (formattedPhone.startsWith('234') && formattedPhone.length === 13) {
+		console.log('valid format', formattedPhone);
+		return `+${formattedPhone}`;
+	}
+
+	// If it starts with 0, remove it and prepend +234
+	if (formattedPhone.startsWith('0')) {
+		formattedPhone = `234${formattedPhone.slice(1)}`;
+	}
+
+	// Validate final format: must start with +234 and be exactly 13 digits
+	return formattedPhone.length === 13 ? `+${formattedPhone}` : null;
+};
+
 
 export const register = async (req, res) => {
 	const { username, password, email, phone, role = 'USER' } = req.body;
 	try {
+		// Validate and format the phone number
+		const formattedPhone = formatPhoneNumber(phone);
+		if (!formattedPhone) {
+			return res.status(409).json({ message: 'Please provide a valid phone' });
+		}
+
 		const emailExist = await User.findOne({ email });
-		// const emailexist = await pool.query(
-		// 	`SELECT EXISTS (SELECT * FROM users WHERE email = $1)`,
-		// 	[email]
-		// );
+		console.log('is a valid format', formattedPhone);
 		if (emailExist) {
 			return res
 				.status(409)
@@ -27,7 +50,7 @@ export const register = async (req, res) => {
 		const newUser = await User.create({
 			email,
 			username,
-			phone,
+			phone: formattedPhone,
 			password: hashedPassword,
 			email,
 			role,

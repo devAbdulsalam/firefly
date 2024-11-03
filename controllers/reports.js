@@ -2,6 +2,12 @@
 import { sendSMS } from '../utils/termii.js';
 import Report from '../models/Report.js';
 import User from '../models/User.js';
+import twilio from 'twilio';
+
+const client = twilio(
+	process.env.TWILIO_ACCOUNT_SID,
+	process.env.TWILIO_AUTH_TOKEN
+);
 
 // export const getDashboard = async (req, res) => {
 // 	try {
@@ -81,8 +87,13 @@ export const reportEmergency = async (req, res) => {
 		// Send SMS
 		const geolocation = `https://gps-coordinates.org/my-location.php?lat=${latitude}&lng=${longitude}`;
 		const message = `Fire Incident Reported by ${userName}\nPhone: ${userPhone}\nAddress: ${address}\nGeolocation: ${geolocation}`;
-		await sendSMS(message, adminPhone);
-		// console.log('report', smsData);
+
+		// Send SMS to admin
+		await client.messages.create({
+			body: message,
+			from: process.env.TWILIO_PHONE_NUMBER, // Replace with your Twilio number
+			to: adminPhone,
+		});
 
 		// Respond with success
 		res.status(200).json({
@@ -90,7 +101,7 @@ export const reportEmergency = async (req, res) => {
 			message: 'Incident reported successfully',
 		});
 	} catch (error) {
-		console.error(error);
+		console.error('report error', error);
 		res.status(500).send('Internal Server Error');
 	}
 };
