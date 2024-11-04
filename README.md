@@ -1,189 +1,138 @@
-# Automated University Store System
+Here’s a sample README file for a Fire Emergency API:
 
-This is an Automated University Store System built with Node.js, Express, and PostgreSQL. The system includes user management, store management, order processing, and reporting functionalities.
+---
 
-## Table of Contents
+# 🔥 Fire Emergency Reporting API
 
+The Fire Emergency Reporting API enables users to report fire incidents by providing location details, images, and descriptions. This API then sends an SMS notification to the fire agency via Twilio, alerting them to the emergency details and location. The API is suitable for integration into mobile or web applications focused on community safety and emergency response.
+
+## 📖 Table of Contents
 - [Features](#features)
-- [Installation](#installation)
-- [Database Setup](#database-setup)
+- [Technologies](#technologies)
+- [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
-- [Running the Application](#running-the-application)
-- [License](#license)
+- [Error Handling](#error-handling)
+- [Future Improvements](#future-improvements)
 
-## Features
+## ✨ Features
+- **User Authentication**: Secure authentication for reporting users.
+- **Report Submission**: Users can report an incident by providing:
+  - Address
+  - Description of the incident
+  - Location coordinates (latitude & longitude)
+  - Optional image upload of the incident.
+- **Automated SMS Alerts**: A Twilio-powered SMS notification is sent to the agency, detailing the incident’s address, reporter’s information, and a link to the geolocation.
+- **Admin Support**: Admin users can view reports and receive notifications to respond efficiently.
 
-### User Management
+## 🛠️ Technologies
+- **Node.js** and **Express** for server-side logic
+- **MongoDB** for data storage
+- **Multer** for image handling
+- **Twilio** for SMS messaging
+- **AWS S3** or other storage solutions (optional) for storing incident images
 
-- **Registration**: Users can register with a username, password, email, and role (student, staff, admin).
-- **Login**: Users can log in with a username and password.
-- **Password Recovery**: Users can recover their password via email.
+## 🚀 Getting Started
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB instance (local or cloud-based)
+- Twilio account (for SMS)
 
-### Store Management
-
-- **Product Catalog**: View all products with details like name, description, price, and quantity.
-- **Inventory Management**: Manage product inventory and check product quantities.
-
-### Order Processing
-
-- **Order Creation**: Users can place orders for products.
-- **Order Confirmation**: Users receive order confirmation notifications.
-
-### Reporting and Analytics
-
-- **Sales Reports**: Generate sales reports by date with total sales.
-- **Inventory Reports**: Generate inventory reports for product quantities.
-
-## Installation
-
-1. **Clone the repository**:
+### Installation
+1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/university-store.git
-   cd university-store
+   git clone https://github.com/devabdulsalam/firefly.git
+   cd firefly
    ```
-   Sure, here is a README file for the Automated University Store System application:
 
-````markdown
-# Automated University Store System
-
-This is an Automated University Store System built with Node.js, Express, and PostgreSQL. The system includes user management, store management, order processing, and reporting functionalities.
-
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Database Setup](#database-setup)
-- [Environment Variables](#environment-variables)
-- [API Endpoints](#api-endpoints)
-- [Running the Application](#running-the-application)
-- [License](#license)
-
-## Features
-
-### User Management
-
-- **Registration**: Users can register with a username, password, email, and role (student, staff, admin).
-- **Login**: Users can log in with a username and password.
-- **Password Recovery**: Users can recover their password via email.
-
-### Store Management
-
-- **Product Catalog**: View all products with details like name, description, price, and quantity.
-- **Inventory Management**: Manage product inventory and check product quantities.
-
-### Order Processing
-
-- **Order Creation**: Users can place orders for products.
-- **Order Confirmation**: Users receive order confirmation notifications.
-
-### Reporting and Analytics
-
-- **Sales Reports**: Generate sales reports by date with total sales.
-- **Inventory Reports**: Generate inventory reports for product quantities.
-
-## Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/university-store.git
-   cd university-store
-   ```
-````
-
-2. **Install dependencies**:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-## Database Setup
+3. Set up environment variables (see below for configuration).
 
-1. **Create the PostgreSQL database**:
-
-   ```sql
-   CREATE DATABASE university_store;
-   \c university_store
-
-   CREATE TABLE users (
-     id SERIAL PRIMARY KEY,
-     username VARCHAR(255) NOT NULL,
-     password VARCHAR(255) NOT NULL,
-     email VARCHAR(255) NOT NULL,
-     role VARCHAR(50) NOT NULL
-   );
-
-   CREATE TABLE products (
-     id SERIAL PRIMARY KEY,
-     name VARCHAR(255) NOT NULL,
-     description TEXT,
-     price FLOAT NOT NULL,
-     quantity INTEGER NOT NULL
-   );
-
-   CREATE TABLE orders (
-     id SERIAL PRIMARY KEY,
-     user_id INTEGER REFERENCES users(id),
-     product_id INTEGER REFERENCES products(id),
-     quantity INTEGER NOT NULL,
-     total FLOAT NOT NULL,
-     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
-
-   CREATE TABLE inventory (
-     product_id INTEGER PRIMARY KEY REFERENCES products(id),
-     quantity INTEGER NOT NULL
-   );
-   ```
-
-## Environment Variables
-
-Create a `.env` file in the root directory and add the following environment variables:
-
-```
-DATABASE_URL=postgresql://username:password@localhost:5432/university_store
-JWT_SECRET=your_jwt_secret_key
-```
-
-## API Endpoints
-
-### User Management
-
-- **Register**: `POST /users`
-  - Data: `{ "username": "string", "password": "string", "email": "string", "role": "string" }`
-- **Login**: `POST /login`
-  - Data: `{ "username": "string", "password": "string" }`
-- **Password Recovery**: `POST /password-recovery`
-  - Data: `{ "email": "string" }`
-
-### Store Management
-
-- **Get Products**: `GET /products`
-- **Get Inventory**: `GET /inventory`
-
-### Order Processing
-
-- **Create Order**: `POST /orders`
-  - Data: `{ "user_id": "integer", "product_id": "integer", "quantity": "integer", "total": "float" }`
-
-### Reporting and Analytics
-
-- **Get Sales Reports**: `GET /sales-reports`
-- **Get Inventory Reports**: `GET /inventory-reports`
-
-## Running the Application
-
-1. **Start the application**:
+4. Start the server:
    ```bash
-   npm run dev
+   npm start
    ```
 
-The server will start on port 3000 by default. You can change the port by setting the `PORT` environment variable in the `.env` file.
+## 🔐 Environment Variables
+Create a `.env` file in the project root and include the following:
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
+```env
+PORT=3000
+MONGO_URI=your_mongo_database_uri
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_phone_number
+ADMIN_PHONE_NUMBER=admin_phone_number_to_receive_alerts
+AWS_S3_BUCKET_NAME=your_s3_bucket_name (optional)
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 ```
 
-This README file includes a detailed description of the project, its features, installation steps, database setup instructions, API endpoints, and how to run the application. Adjust the GitHub repository link and other specific details as needed.
+## 📋 API Endpoints
+
+### 1. Report Fire Incident
+- **Endpoint**: `POST /api/report`
+- **Description**: Submit a report with incident details, location, and an optional image.
+- **Headers**: `Authorization: Bearer <token>`
+- **Body Parameters**:
+  - `address` (string) – required
+  - `description` (string) – required
+  - `latitude` (number) – required
+  - `longitude` (number) – required
+  - `image` (file) – optional (JPEG/PNG)
+- **Response**:
+  ```json
+  {
+    "report": {
+      "id": "string",
+      "userId": "string",
+      "address": "string",
+      "description": "string",
+      "imageUrl": "string",
+      "latitude": "number",
+      "longitude": "number",
+      "createdAt": "date"
+    },
+    "message": "Incident reported successfully"
+  }
+  ```
+  
+### 2. Send Emergency SMS Notification
+After submitting a report, an SMS message is automatically sent to the agency’s phone number.
+
+- **Description**: This function is triggered upon report submission.
+- **Details Sent**:
+  - Reporter’s name and phone
+  - Incident address
+  - Description
+  - Link to Google Maps coordinates for exact location
+
+## 🛑 Error Handling
+Errors are returned as JSON with an appropriate HTTP status code:
+- `400`: Bad Request (e.g., missing required fields)
+- `401`: Unauthorized (e.g., invalid token)
+- `404`: Not Found (e.g., user or admin not found)
+- `500`: Internal Server Error
+
+Example error response:
+```json
+{
+  "error": "Description of the error"
+}
 ```
+
+## 🔮 Future Improvements
+- Implement push notifications for quicker response times.
+- Enable geolocation-based incident clustering to prioritize emergency response.
+- Add logging and analytics to monitor response times and incident frequency.
+
+## 📜 License
+This project is licensed under the MIT License.
+
+--- 
+
+Feel free to replace placeholder URLs and configuration details with actual values for deployment.
